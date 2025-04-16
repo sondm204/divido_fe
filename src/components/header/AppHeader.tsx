@@ -5,7 +5,7 @@ import { Moon, Sun } from 'lucide-react';
 type AppHeaderProps = {}
 
 export const AppHeader = React.memo((props: AppHeaderProps) => {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(true);
 
     const toggleDark = () => {
         setDarkMode(!darkMode);
@@ -13,7 +13,7 @@ export const AppHeader = React.memo((props: AppHeaderProps) => {
     };
 
     return (
-        <header className="w-full px-6 py-4 shadow-md dark:bg-gray-900 dark:text-white bg-white flex justify-between items-center">
+        <header className="relative w-full px-6 py-4 shadow-md dark:bg-gray-900 dark:text-white bg-white flex justify-between items-center z-10">
             {/* Logo */}
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                 <Link to="/">Divido</Link>
@@ -25,7 +25,7 @@ export const AppHeader = React.memo((props: AppHeaderProps) => {
                     Trang chủ
                 </Link>
                 <Link to="/expenses" className="hover:text-blue-500 dark:hover:text-blue-300">
-                    Nhóm
+                    Chi tiêu
                 </Link>
                 <Link to="/contact" className="hover:text-blue-500 dark:hover:text-blue-300">
                     Liên hệ
