@@ -4,14 +4,14 @@ import styled from "styled-components";
 
 
 type Props = {};
-export const DashboardBody = (props: Props) => {
+export const HomeBody = (props: Props) => {
     return (
-        <DashboardBodyWrapper>
+        <HomeBodyWrapper>
             Dashboard
-        </DashboardBodyWrapper>
+        </HomeBodyWrapper>
     );
 };
 
-const DashboardBodyWrapper = styled.div`
+const HomeBodyWrapper = styled.div`
     height: 100%;
 `;

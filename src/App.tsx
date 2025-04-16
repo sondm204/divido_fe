@@ -2,17 +2,17 @@ import React from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { DashboardPage } from './pages/dashboard/DashboardPage';
+import { HomePage } from './pages/home/HomePage';
 import { ExpensePage } from './pages/expense/ExpensePage';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <DashboardPage />,
+    element: <HomePage />,
   },
   {
-    path: "/dashboard",
-    element: <DashboardPage />,
+    path: "/home",
+    element: <HomePage />,
   },
   {
     path: "/expenses",
