@@ -4,10 +4,7 @@ import { AppHeader } from '../../components/header/AppHeader';
 import { ExpenseBody } from '../../components/expense/ExpenseBody';
 
 
-type Props = {
-    
-}
-export const ExpensePage = ({}: Props) => {
+export const ExpensePage = () => {
     return (
         <ExpensePageWrapper>
             <AppHeader />
