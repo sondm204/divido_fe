@@ -9,8 +9,8 @@ import {
 } from "../../components/ui/dialog";
 import { Pencil, Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
-import { Label } from "../ui/label";
-import { Button } from "../commons/Button";
+import { CgAddR } from "react-icons/cg";
+
 
 
 
@@ -81,6 +81,13 @@ export const ExpenseList = () => {
                                                         </td>
                                                     </tr>
                                                 ))}
+
+                                                {/* ✅ Dòng chứa nút Thêm */}
+                                                <tr>
+                                                    <td colSpan={6} className="px-2 py-2">
+                                                        <CgAddR className="text-xl hover:text-blue-600 transition ease-in-out duration-200 cursor-pointer" />
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
