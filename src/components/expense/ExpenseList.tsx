@@ -10,11 +10,19 @@ import {
 import { Pencil, Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
+import { useEffect } from "react";
 
 
 
+type Props = {
+    selectedGroupId: string | null
+};
 
-export const ExpenseList = () => {
+export const ExpenseList = (props: Props) => {
+    const { selectedGroupId } = props;
+    useEffect(() => {
+        console.log(selectedGroupId);
+    }, [selectedGroupId])
     const DetailsIcon = TbListDetails as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
     const mockData = [
         { name: "Sữa tươi", quantity: 2, price: 28000, owner: "An" },

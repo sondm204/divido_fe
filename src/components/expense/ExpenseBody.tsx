@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGroups } from '../../state/GroupEditor/GroupEditorSlice';
 import styled from "styled-components";
 import { Plus, Search, X } from 'lucide-react';
 import {
@@ -18,7 +20,7 @@ import { ExpenseList } from "./ExpenseList";
 import { Pencil, Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
-
+import { AppDispatch, RootState } from "../../state/store";
 
 
 
@@ -26,8 +28,17 @@ import { CgAddR } from "react-icons/cg";
 type Props = {};
 export const ExpenseBody = (props: Props) => {
 
+    const userId = "76b06567-01d6-424d-b3d3-dd6f7ae6fa5d";
     const [isAddingNewGroup, setIsAddingNewGroup] = React.useState(false);
 
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        dispatch(fetchGroups(userId));
+    }, [dispatch, userId]);
+
+    const groups = useSelector((state: RootState) => state.groupEditor.groups);
+    const selectedGroupId = useSelector((state: RootState) => state.groupEditor.selectedGroupId);
 
     const TagInputMock = () => {
         return (
@@ -74,12 +85,14 @@ export const ExpenseBody = (props: Props) => {
 
                     {/* Danh sách nhóm */}
                     <div className="flex-1 overflow-y-auto space-y-2 dark:text-white">
-                        <div className="p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer">
-                            Phòng trọ A
-                        </div>
-                        <div className="p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer">
-                            Công ty ABC
-                        </div>
+                        {groups.map((group) => (
+                            <div
+                                key={group.id}
+                                className="p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                            >
+                                {group.name}
+                            </div>
+                        ))}
                     </div>
 
                     {/* Nút thêm nhóm */}
@@ -93,29 +106,27 @@ export const ExpenseBody = (props: Props) => {
                             <DialogHeader>
                                 <DialogTitle>Thêm nhóm chi tiêu</DialogTitle>
                             </DialogHeader>
-                            <DialogDescription>
-                                <div className="space-y-4 mt-2">
-                                    <div className="flex flex-col gap-1">
-                                        <Label className="text-sm font-medium">Tên nhóm</Label>
-                                        <Input placeholder="Nhập tên nhóm" />
-                                    </div>
-
-                                    <div className="flex flex-col gap-1">
-                                        <Label className="text-sm font-medium">Số lượng người</Label>
-                                        <Input defaultValue={0} disabled />
-                                    </div>
-
-                                    <div className="flex flex-col gap-1">
-                                        <Label className="text-sm font-medium">Thành viên</Label>
-                                        <TagInputMock />
-                                    </div>
-
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-sm font-medium">Ngày tạo</label>
-                                        <Input type="date" value={new Date().toISOString().split('T')[0]} disabled />
-                                    </div>
+                            <div className="space-y-4 mt-2">
+                                <div className="flex flex-col gap-1">
+                                    <Label className="text-sm font-medium">Tên nhóm</Label>
+                                    <Input placeholder="Nhập tên nhóm" />
                                 </div>
-                            </DialogDescription>
+
+                                <div className="flex flex-col gap-1">
+                                    <Label className="text-sm font-medium">Số lượng người</Label>
+                                    <Input defaultValue={0} disabled />
+                                </div>
+
+                                <div className="flex flex-col gap-1">
+                                    <Label className="text-sm font-medium">Thành viên</Label>
+                                    <TagInputMock />
+                                </div>
+
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-sm font-medium">Ngày tạo</label>
+                                    <Input type="date" value={new Date().toISOString().split('T')[0]} disabled />
+                                </div>
+                            </div>
 
                             <DialogFooter className="mt-4">
                                 <Button type="submit" className="bg-blue-600 text-white">
@@ -139,29 +150,27 @@ export const ExpenseBody = (props: Props) => {
                                 <DialogHeader>
                                     <DialogTitle>Chỉnh sửa nhóm chi tiêu</DialogTitle>
                                 </DialogHeader>
-                                <DialogDescription>
-                                    <div className="space-y-4 mt-2">
-                                        <div className="flex flex-col gap-1">
-                                            <Label className="text-sm font-medium">Tên nhóm</Label>
-                                            <Input value='Phòng trọ A' />
-                                        </div>
-
-                                        <div className="flex flex-col gap-1">
-                                            <Label className="text-sm font-medium">Số lượng người</Label>
-                                            <Input value='3' disabled />
-                                        </div>
-
-                                        <div className="flex flex-col gap-1">
-                                            <Label className="text-sm font-medium">Thành viên</Label>
-                                            <TagInputMock />
-                                        </div>
-
-                                        <div className="flex flex-col gap-1">
-                                            <label className="text-sm font-medium">Ngày tạo</label>
-                                            <Input value='01/01/2025' disabled />
-                                        </div>
+                                <div className="space-y-4 mt-2">
+                                    <div className="flex flex-col gap-1">
+                                        <Label className="text-sm font-medium">Tên nhóm</Label>
+                                        <Input value='Phòng trọ A' />
                                     </div>
-                                </DialogDescription>
+
+                                    <div className="flex flex-col gap-1">
+                                        <Label className="text-sm font-medium">Số lượng người</Label>
+                                        <Input value='3' disabled />
+                                    </div>
+
+                                    <div className="flex flex-col gap-1">
+                                        <Label className="text-sm font-medium">Thành viên</Label>
+                                        <TagInputMock />
+                                    </div>
+
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-sm font-medium">Ngày tạo</label>
+                                        <Input value='01/01/2025' disabled />
+                                    </div>
+                                </div>
 
                                 <DialogFooter className="mt-4">
                                     <Button type="submit" className="bg-blue-600 text-white">
@@ -175,7 +184,7 @@ export const ExpenseBody = (props: Props) => {
                     {/* Nút thêm chi tiêu */}
                     <div className="flex justify-end mb-2">
                         <Dialog>
-                            <DialogTrigger>
+                            <DialogTrigger asChild>
                                 <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm">
                                     + Thêm chi tiêu
                                 </button>
@@ -184,117 +193,115 @@ export const ExpenseBody = (props: Props) => {
                                 <DialogHeader>
                                     <DialogTitle>Tạo chi tiêu</DialogTitle>
                                 </DialogHeader>
-                                <DialogDescription>
-                                    <div className="space-y-4 mt-2">
-                                        <div className="flex flex-col gap-1">
-                                            <Label className="text-sm font-medium">Ngày</Label>
-                                            <Input type="date" value={new Date().toISOString().split('T')[0]} />
+                                <div className="space-y-4 mt-2">
+                                    <div className="flex flex-col gap-1">
+                                        <Label className="text-sm font-medium">Ngày</Label>
+                                        <Input type="date" value={new Date().toISOString().split('T')[0]} />
+                                    </div>
+
+                                    <div className="flex justify-between">
+                                        <div className="flex flex-col gap-1 w-[calc(50%-5px)]">
+                                            <Label className="text-sm font-medium">Danh mục</Label>
+                                            <select className="w-full px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-sm outline-none">
+                                                <option>Danh mục 1</option>
+                                                <option>Danh mục 2</option>
+                                                <option>Danh mục 3</option>
+                                            </select>
                                         </div>
 
-                                        <div className="flex justify-between">
-                                            <div className="flex flex-col gap-1 w-[calc(50%-5px)]">
-                                                <Label className="text-sm font-medium">Danh mục</Label>
-                                                <select className="w-full px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-sm outline-none">
-                                                    <option>Danh mục 1</option>
-                                                    <option>Danh mục 2</option>
-                                                    <option>Danh mục 3</option>
-                                                </select>
-                                            </div>
-
-                                            <div className="flex flex-col gap-1 w-[calc(50%-5px)]">
-                                                <Label className="text-sm font-medium">Người chi</Label>
-                                                <select className="w-full px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-sm outline-none">
-                                                    <option>Danh mục 1</option>
-                                                    <option>Danh mục 2</option>
-                                                    <option>Danh mục 3</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-col gap-1">
-                                            <label className="text-sm font-medium">Tổng tiền</label>
-                                            <Input />
-                                        </div>
-
-                                        <div className="flex flex-col gap-1">
-                                            <label className="text-sm font-medium">Danh sách mua đồ</label>
-                                            <div className="flex gap-1">
-                                                <Input />
-                                                <Dialog>
-                                                    <DialogTrigger>
-                                                        <TbListDetails className="text-lg hover:text-blue-600 transition ease-in-out duration-200 cursor-pointer" />
-                                                    </DialogTrigger>
-                                                    <DialogContent className="max-w-3xl">
-                                                        <DialogHeader>
-                                                            <DialogTitle>Chi tiết hóa đơn ngày 11/02/2025</DialogTitle>
-                                                        </DialogHeader>
-
-                                                        <div className="overflow-hidden max-h-[400px] rounded-lg shadow-lg">
-                                                            <table className="w-full text-sm dark:text-gray-300">
-                                                                <thead className="bg-gray-100 dark:bg-gray-800 text-left">
-                                                                    <tr>
-                                                                        <th className="px-2 py-2">Tên món</th>
-                                                                        <th className="w-[12%] px-2 py-2">Số lượng</th>
-                                                                        <th className="w-[12%] px-2 py-2">Đơn giá</th>
-                                                                        <th className="w-[20%] px-2 py-2">Tổng tiền</th>
-                                                                        <th className="px-2 py-2">Chủ nhân</th>
-                                                                        <th className="px-2 py-2">Thao tác</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:text-gray-300">
-                                                                    <tr >
-                                                                        <td className="px-2 py-2"><Input /></td>
-                                                                        <td className="px-2 py-2"><Input /></td>
-                                                                        <td className="px-2 py-2">
-                                                                            <div className="flex gap-1 items-center">
-                                                                                <span>0</span>đ
-                                                                            </div>
-                                                                        </td>
-                                                                        <td className="px-2 py-2">
-                                                                            <div className="flex gap-1 items-center">
-                                                                                <Input />đ
-                                                                            </div>
-                                                                        </td>
-                                                                        <td className="px-2 py-2">
-                                                                            <select className="w-full px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-sm outline-none">
-                                                                                <option>Danh mục 1</option>
-                                                                                <option>Danh mục 2</option>
-                                                                                <option>Danh mục 3</option>
-                                                                            </select>
-                                                                        </td>
-                                                                        <td className="px-2 py-2">
-                                                                            <Trash2 size={16} className="text-red-500 hover:scale-110 transition ease-in-out duration-200 cursor-pointer" />
-                                                                        </td>
-                                                                    </tr>
-
-                                                                    {/* ✅ Dòng chứa nút Thêm */}
-                                                                    <tr>
-                                                                        <td colSpan={6} className="px-2 py-2">
-                                                                            <CgAddR className="text-xl hover:text-blue-600 transition ease-in-out duration-200 cursor-pointer" />
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <DialogFooter>
-                                                            <Button type="submit">Lưu</Button>
-                                                        </DialogFooter>
-                                                    </DialogContent>
-                                                </Dialog>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-1">
-                                            <label className="text-sm font-medium">Chia sẻ</label>
-                                            <Input />
+                                        <div className="flex flex-col gap-1 w-[calc(50%-5px)]">
+                                            <Label className="text-sm font-medium">Người chi</Label>
+                                            <select className="w-full px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-sm outline-none">
+                                                <option>Danh mục 1</option>
+                                                <option>Danh mục 2</option>
+                                                <option>Danh mục 3</option>
+                                            </select>
                                         </div>
                                     </div>
-                                </DialogDescription>
+
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-sm font-medium">Tổng tiền</label>
+                                        <Input />
+                                    </div>
+
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-sm font-medium">Danh sách mua đồ</label>
+                                        <div className="flex gap-1">
+                                            <Input />
+                                            <Dialog>
+                                                <DialogTrigger>
+                                                    <TbListDetails className="text-lg hover:text-blue-600 transition ease-in-out duration-200 cursor-pointer" />
+                                                </DialogTrigger>
+                                                <DialogContent className="max-w-3xl">
+                                                    <DialogHeader>
+                                                        <DialogTitle>Chi tiết hóa đơn ngày 11/02/2025</DialogTitle>
+                                                    </DialogHeader>
+
+                                                    <div className="overflow-hidden max-h-[400px] rounded-lg shadow-lg">
+                                                        <table className="w-full text-sm dark:text-gray-300">
+                                                            <thead className="bg-gray-100 dark:bg-gray-800 text-left">
+                                                                <tr>
+                                                                    <th className="px-2 py-2">Tên món</th>
+                                                                    <th className="w-[12%] px-2 py-2">Số lượng</th>
+                                                                    <th className="w-[12%] px-2 py-2">Đơn giá</th>
+                                                                    <th className="w-[20%] px-2 py-2">Tổng tiền</th>
+                                                                    <th className="px-2 py-2">Chủ nhân</th>
+                                                                    <th className="px-2 py-2">Thao tác</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:text-gray-300">
+                                                                <tr >
+                                                                    <td className="px-2 py-2"><Input /></td>
+                                                                    <td className="px-2 py-2"><Input /></td>
+                                                                    <td className="px-2 py-2">
+                                                                        <div className="flex gap-1 items-center">
+                                                                            <span>0</span>đ
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="px-2 py-2">
+                                                                        <div className="flex gap-1 items-center">
+                                                                            <Input />đ
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="px-2 py-2">
+                                                                        <select className="w-full px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-sm outline-none">
+                                                                            <option>Danh mục 1</option>
+                                                                            <option>Danh mục 2</option>
+                                                                            <option>Danh mục 3</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td className="px-2 py-2">
+                                                                        <Trash2 size={16} className="text-red-500 hover:scale-110 transition ease-in-out duration-200 cursor-pointer" />
+                                                                    </td>
+                                                                </tr>
+
+                                                                {/* ✅ Dòng chứa nút Thêm */}
+                                                                <tr>
+                                                                    <td colSpan={6} className="px-2 py-2">
+                                                                        <CgAddR className="text-xl hover:text-blue-600 transition ease-in-out duration-200 cursor-pointer" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <DialogFooter>
+                                                        <Button type="submit">Lưu</Button>
+                                                    </DialogFooter>
+                                                </DialogContent>
+                                            </Dialog>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-sm font-medium">Chia sẻ</label>
+                                        <Input />
+                                    </div>
+                                </div>
                             </DialogContent>
                         </Dialog>
                     </div>
 
                     {/* Bảng chi tiêu */}
-                    <ExpenseList />
+                    <ExpenseList selectedGroupId={selectedGroupId} />
                 </main>
             </div>
         </ExpenseBodyWrapper>
