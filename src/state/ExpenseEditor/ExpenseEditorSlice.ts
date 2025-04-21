@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getAllExpenses } from "../../services/ExpenseService";
 
+
+export interface ShareRatio {
+    username: string;
+    ratio: number;
+}
 export interface Category {
     id: string;
     name: string;
@@ -19,6 +24,7 @@ export interface Expense {
     payer: User;
     spentAt: Date;
     note: string;
+    shareRatios: ShareRatio[];
 }
 
 export const expenseEditorInitalSlice: Expense[] = [];

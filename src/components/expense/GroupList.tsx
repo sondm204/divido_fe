@@ -24,8 +24,6 @@ type Props = {}
 export const GroupList = (props: Props) => {
     const [isAddingNewGroup, setIsAddingNewGroup] = React.useState(false);
     const groups = useSelector((state: RootState) => state.groupEditor.groups);
-    const selectedGroupId = useSelector((state: RootState) => state.groupEditor.selectedGroupId);
-    const selectedGroup = useSelector((state: RootState) => state.groupEditor.groups.find((g) => g.id === selectedGroupId));
 
     const dispatch = useDispatch<AppDispatch>();
 
