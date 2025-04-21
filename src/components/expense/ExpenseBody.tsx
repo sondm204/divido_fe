@@ -21,7 +21,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
 import { AppDispatch, RootState } from "../../state/store";
-
+import { setSelectedGroupId } from "../../state/GroupEditor/GroupEditorSlice";
 
 
 
@@ -68,6 +68,10 @@ export const ExpenseBody = (props: Props) => {
         );
     }
 
+    const handleSelectGroup = (groupId: string) => {
+        dispatch(setSelectedGroupId(groupId));
+    }
+
     return (
         <ExpenseBodyWrapper>
             <div className="flex h-[calc(100vh-64px)] dark:bg-gray-800 bg-gray-100">
@@ -89,6 +93,7 @@ export const ExpenseBody = (props: Props) => {
                             <div
                                 key={group.id}
                                 className="p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                                onClick={() => handleSelectGroup(group.id)}
                             >
                                 {group.name}
                             </div>

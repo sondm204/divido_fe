@@ -11,8 +11,11 @@ import { Pencil, Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
 import { useEffect } from "react";
-
-
+import { AppDispatch, RootState } from "../../state/store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchExpenses } from "../../state/ExpenseEditor/ExpenseEditorSlice";
+import { Expense } from '../../state/ExpenseEditor/ExpenseEditorSlice';
+import { format } from 'date-fns';
 
 type Props = {
     selectedGroupId: string | null
@@ -20,10 +23,14 @@ type Props = {
 
 export const ExpenseList = (props: Props) => {
     const { selectedGroupId } = props;
+    const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
-        console.log(selectedGroupId);
-    }, [selectedGroupId])
-    const DetailsIcon = TbListDetails as unknown as React.FC<React.SVGProps<SVGSVGElement>>;
+        dispatch(fetchExpenses(selectedGroupId || ""));
+    }, [dispatch, selectedGroupId]);
+
+    const expenseList = useSelector((state: RootState) => state.expenseEditor);
+    console.log(expenseList);
+    
     const mockData = [
         { name: "Sữa tươi", quantity: 2, price: 28000, owner: "An" },
         { name: "Bánh mì", quantity: 5, price: 10000, owner: "Bình" },
@@ -45,6 +52,24 @@ export const ExpenseList = (props: Props) => {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:text-gray-300">
+                    {expenseList.map((item: Expense, index) => (
+                        <tr key={index}>
+                            <td className="px-4 py-2">{index + 1}</td>
+                            <td className="px-4 py-2">{format(item.spentAt, "dd/MM/yyyy")}</td>
+                            <td className="px-4 py-2">{item.category.name}</td>
+                            <td className="px-4 py-2">{item.payer.name}</td>
+                            <td className="px-4 py-2">{item.amount}</td>
+                            <td className="px-4 py-2">{item.note}</td>
+                            <td className="px-4 py-2">1:1</td>
+                            <td className="flex gap-2 px-4 py-2">
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <TbListDetails className="text-lg hover:text-blue-600 transition ease-in-out duration-200 cursor-pointer" />
+                                    </DialogTrigger>
+                                </Dialog>
+                            </td>
+                        </tr>
+                    ))}
                     <tr>
                         <td className="px-4 py-2">1</td>
                         <td className="px-4 py-2">02/04/2025</td>
@@ -56,7 +81,7 @@ export const ExpenseList = (props: Props) => {
                         <td className="flex gap-2 px-4 py-2">
                             <Dialog>
                                 <DialogTrigger>
-                                    <DetailsIcon className="text-lg hover:text-blue-600 transition ease-in-out duration-200 cursor-pointer" />
+                                    <TbListDetails className="text-lg hover:text-blue-600 transition ease-in-out duration-200 cursor-pointer" />
                                 </DialogTrigger>
                                 <DialogContent className="max-w-3xl">
                                     <DialogHeader>

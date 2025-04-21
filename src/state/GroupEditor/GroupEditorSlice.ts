@@ -19,7 +19,12 @@ const groupEditorSlice = createSlice({
     name: "groupEditor",
     initialState: groupEditorInitialSlice,
     reducers: {
-        
+        setGroups: (state, action: PayloadAction<Group[]>) => {
+            state.groups = action.payload;
+        },
+        setSelectedGroupId: (state, action: PayloadAction<string>) => {
+            state.selectedGroupId = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -30,7 +35,7 @@ const groupEditorSlice = createSlice({
     },
 });
 
-// export const { } = groupEditorSlice.actions;
+export const { setGroups, setSelectedGroupId } = groupEditorSlice.actions;
 
 
 
