@@ -67,7 +67,7 @@ export const ExpenseList = (props: Props) => {
                                             <DialogTitle>Chi tiết hóa đơn ngày 11/02/2025</DialogTitle>
                                         </DialogHeader>
 
-                                        <BillList />
+                                        <BillList selectedExpenseId={item.id} />
                                     </DialogContent>
                                 </Dialog>
                             </td>
