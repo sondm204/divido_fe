@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import {
     Dialog,
@@ -6,57 +6,28 @@ import {
     DialogTrigger,
     DialogContent,
     DialogTitle,
-    DialogDescription,
     DialogFooter,
 } from "../../components/ui/dialog";
-import { Plus, Search, X } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
-import { setSelectedGroupId } from "../../state/GroupEditor/GroupEditorSlice";
-import { Input } from '../../components/ui/input';
-import { Label } from "../ui/label";
+import { setSelectedGroupId, fetchUsersByGroup } from "../../state/GroupEditor/GroupEditorSlice";
 import { Button } from "../commons/Button";
+import { GroupForm } from "./form/GroupForm";
 
 
 
 type Props = {}
 
 export const GroupList = (props: Props) => {
-    const [isAddingNewGroup, setIsAddingNewGroup] = React.useState(false);
+    const [isAddingNewGroup, setIsAddingNewGroup] = useState(false);
     const groups = useSelector((state: RootState) => state.groupEditor.groups);
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const TagInputMock = () => {
-        return (
-            <div className="border rounded-md p-2 flex flex-wrap gap-2 bg-white dark:bg-gray-800 min-h-[48px]">
-                {/* Tag 1 */}
-                <div className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
-                    alice@gmail.com
-                    <button className="ml-1 text-blue-600 hover:text-red-500 dark:text-blue-300 dark:hover:text-red-400">
-                        <X size={14} />
-                    </button>
-                </div>
-
-                {/* Tag 2 */}
-                <div className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
-                    bob@example.com
-                    <button className="ml-1 text-blue-600 hover:text-red-500 dark:text-blue-300 dark:hover:text-red-400">
-                        <X size={14} />
-                    </button>
-                </div>
-
-                {/* Input field */}
-                <input
-                    className="flex-1 min-w-[120px] px-2 py-1 text-sm outline-none bg-transparent"
-                    placeholder="Thêm thành viên..."
-                />
-            </div>
-        );
-    }
-
     const handleSelectGroup = (groupId: string) => {
         dispatch(setSelectedGroupId(groupId));
+        dispatch(fetchUsersByGroup(groupId));
     }
 
     return (
@@ -98,28 +69,7 @@ export const GroupList = (props: Props) => {
                     <DialogHeader>
                         <DialogTitle>Thêm nhóm chi tiêu</DialogTitle>
                     </DialogHeader>
-                    <div className="space-y-4 mt-2">
-                        <div className="flex flex-col gap-1">
-                            <Label className="text-sm font-medium">Tên nhóm</Label>
-                            <Input placeholder="Nhập tên nhóm" />
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <Label className="text-sm font-medium">Số lượng người</Label>
-                            <Input defaultValue={0} disabled />
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <Label className="text-sm font-medium">Thành viên</Label>
-                            <TagInputMock />
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <label className="text-sm font-medium">Ngày tạo</label>
-                            <Input type="date" value={new Date().toISOString().split('T')[0]} disabled />
-                        </div>
-                    </div>
-
+                    <GroupForm type="add" />
                     <DialogFooter className="mt-4">
                         <Button type="submit" className="bg-blue-600 text-white">
                             Lưu thay đổi

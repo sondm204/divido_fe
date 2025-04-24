@@ -9,7 +9,6 @@ import {
     DialogTrigger,
     DialogContent,
     DialogTitle,
-    DialogDescription,
     DialogFooter,
 } from "../../components/ui/dialog";
 import { Input } from '../../components/ui/input';
@@ -21,40 +20,13 @@ import { Pencil, Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
 import { AppDispatch, RootState } from "../../state/store";
-import { GroupList } from "./GroupList";
+import { GroupForm } from "./form/GroupForm";
 
 
 
 export const ExpenseContent = () => {
     const selectedGroupId = useSelector((state: RootState) => state.groupEditor.selectedGroupId);
     const selectedGroup = useSelector((state: RootState) => state.groupEditor.groups.find((g) => g.id === selectedGroupId));
-    const TagInputMock = () => {
-        return (
-            <div className="border rounded-md p-2 flex flex-wrap gap-2 bg-white dark:bg-gray-800 min-h-[48px]">
-                {/* Tag 1 */}
-                <div className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
-                    alice@gmail.com
-                    <button className="ml-1 text-blue-600 hover:text-red-500 dark:text-blue-300 dark:hover:text-red-400">
-                        <X size={14} />
-                    </button>
-                </div>
-
-                {/* Tag 2 */}
-                <div className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
-                    bob@example.com
-                    <button className="ml-1 text-blue-600 hover:text-red-500 dark:text-blue-300 dark:hover:text-red-400">
-                        <X size={14} />
-                    </button>
-                </div>
-
-                {/* Input field */}
-                <input
-                    className="flex-1 min-w-[120px] px-2 py-1 text-sm outline-none bg-transparent"
-                    placeholder="Thêm thành viên..."
-                />
-            </div>
-        );
-    }
 
     return (
         <ExpenseContentWrapper className="flex-1 p-6 overflow-y-auto">
@@ -69,28 +41,7 @@ export const ExpenseContent = () => {
                         <DialogHeader>
                             <DialogTitle>Chỉnh sửa nhóm chi tiêu</DialogTitle>
                         </DialogHeader>
-                        <div className="space-y-4 mt-2">
-                            <div className="flex flex-col gap-1">
-                                <Label className="text-sm font-medium">Tên nhóm</Label>
-                                <Input value='Phòng trọ A' />
-                            </div>
-
-                            <div className="flex flex-col gap-1">
-                                <Label className="text-sm font-medium">Số lượng người</Label>
-                                <Input value='3' disabled />
-                            </div>
-
-                            <div className="flex flex-col gap-1">
-                                <Label className="text-sm font-medium">Thành viên</Label>
-                                <TagInputMock />
-                            </div>
-
-                            <div className="flex flex-col gap-1">
-                                <label className="text-sm font-medium">Ngày tạo</label>
-                                <Input value='01/01/2025' disabled />
-                            </div>
-                        </div>
-
+                        <GroupForm type="edit" groupName={selectedGroup?.name} users={selectedGroup?.users} createdAt={selectedGroup?.createdAt} />
                         <DialogFooter className="mt-4">
                             <Button type="submit" className="bg-blue-600 text-white">
                                 Lưu thay đổi

@@ -1,9 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getGroups } from '../../services/GroupService';
+import { getUsersByGroup } from '../../services/UserService';
+import { User } from "../Entities/EntitiesSlice";
 
 export interface Group {
     id: string;
     name: string;
+    users?: User[];
+    createdAt?: string;
 }
 
 export interface GroupEditorState {
@@ -32,6 +36,14 @@ const groupEditorSlice = createSlice({
                 state.groups = action.payload;
                 state.selectedGroupId = action.payload.length > 0 ? action.payload[0].id : null;
             });
+        builder
+            .addCase(fetchUsersByGroup.fulfilled, (state, action) => {
+                const { groupId, users } = action.payload;
+                const group = state.groups.find(group => group.id === groupId);
+                if (group) {
+                    group.users = users;
+                }
+            });
     },
 });
 
@@ -50,6 +62,18 @@ export const fetchGroups = createAsyncThunk(
         }
     }
 );
+
+export const fetchUsersByGroup = createAsyncThunk(
+    "groupEditor/fetchUsersByGroup",
+    async (groupId: string, { rejectWithValue }) => {
+        try {
+            const response = await getUsersByGroup({ groupId });
+            return response;
+        } catch (error) {
+            return rejectWithValue("Failed to fetch users");
+        }
+    }
+)
 
 export default groupEditorSlice.reducer;
 
