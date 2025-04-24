@@ -1,15 +1,24 @@
 import styled from "styled-components";
 import { Pencil, Trash2 } from "lucide-react";
 import { CgAddR } from "react-icons/cg";
+import { AppDispatch, RootState } from "../../state/store";
+import { useEffect } from "react";
+import { fetchBill } from "../../state/ExpenseEditor/ExpenseEditorSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 
 
-export const BillList = () => {
-    const mockData = [
-        { name: "Sữa tươi", quantity: 2, price: 28000, owner: "An" },
-        { name: "Bánh mì", quantity: 5, price: 10000, owner: "Bình" },
-        { name: "Trứng gà", quantity: 1, price: 32000, owner: "Chi" },
-    ];
+type Props = {
+    selectedExpenseId: string;
+};
+
+export const BillList = (props: Props) => {
+    const { selectedExpenseId } = props;
+    const dispatch = useDispatch<AppDispatch>();
+    useEffect(() => {
+       dispatch(fetchBill(selectedExpenseId)); 
+    }, [dispatch, selectedExpenseId]);
+    const bill = useSelector((state: RootState) => state.expenseEditor.find(expense => expense.id === selectedExpenseId)?.bills || []);
 
     return (
         <BillListWrapper className="overflow-hidden max-h-[400px] rounded-lg shadow-lg">
@@ -25,13 +34,13 @@ export const BillList = () => {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:text-gray-300">
-                    {mockData.map((item, idx) => (
+                    {bill.map((item, idx) => (
                         <tr key={idx}>
                             <td className="px-4 py-2">{item.name}</td>
                             <td className="px-4 py-2">{item.quantity}</td>
-                            <td className="px-4 py-2">{item.price.toLocaleString()}đ</td>
-                            <td className="px-4 py-2">{(item.quantity * item.price).toLocaleString()}đ</td>
-                            <td className="px-4 py-2">{item.owner}</td>
+                            <td className="px-4 py-2">{item.unitPrice?.toLocaleString("de-DE") || 0}đ</td>
+                            <td className="px-4 py-2">{item.totalPrice?.toLocaleString("de-DE") || 0}đ</td>
+                            <td className="px-4 py-2">{item.owner.join(", ")}</td>
                             <td className="px-4 py-2 flex gap-2">
                                 <Pencil size={16} className="hover:scale-110 transition ease-in-out duration-200 cursor-pointer" />
                                 <Trash2 size={16} className="text-red-500 hover:scale-110 transition ease-in-out duration-200 cursor-pointer" />

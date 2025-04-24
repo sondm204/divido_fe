@@ -54,7 +54,9 @@ export const ExpenseList = (props: Props) => {
                             <td className="px-4 py-2">{item.payer.name}</td>
                             <td className="px-4 py-2">{item.amount}</td>
                             <td className="px-4 py-2">{item.note}</td>
-                            <td className="px-4 py-2">1:1</td>
+                            <td className="px-4 py-2">
+                                {item.shareRatios.map(ratio => ratio.ratio).join(":")}
+                            </td>
                             <td className="flex gap-2 px-4 py-2">
                                 <Dialog>
                                     <DialogTrigger>
@@ -65,7 +67,7 @@ export const ExpenseList = (props: Props) => {
                                             <DialogTitle>Chi tiết hóa đơn ngày 11/02/2025</DialogTitle>
                                         </DialogHeader>
 
-                                        <BillList />
+                                        <BillList selectedExpenseId={item.id} />
                                     </DialogContent>
                                 </Dialog>
                             </td>
