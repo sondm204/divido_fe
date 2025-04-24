@@ -11,10 +11,10 @@ import {
 import { Plus, Search } from 'lucide-react';
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
-import { setSelectedGroupId, fetchUsersByGroup } from "../../state/GroupEditor/GroupEditorSlice";
+import { setSelectedGroupId, createNewGroup, Group, fetchGroups } from "../../state/GroupEditor/GroupEditorSlice";
 import { Button } from "../commons/Button";
 import { GroupForm } from "./form/GroupForm";
-
+import { User } from "../../state/Entities/EntitiesSlice";
 
 
 type Props = {}
@@ -22,12 +22,22 @@ type Props = {}
 export const GroupList = (props: Props) => {
     const [isAddingNewGroup, setIsAddingNewGroup] = useState(false);
     const groups = useSelector((state: RootState) => state.groupEditor.groups);
+    const [newGroupData, setNewGroupData] = useState<Group>({
+        id: '',
+        name: '',
+        users: [] as User[],
+        createdAt: new Date().toISOString()
+    })
 
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSelectGroup = (groupId: string) => {
         dispatch(setSelectedGroupId(groupId));
-        dispatch(fetchUsersByGroup(groupId));
+    }
+
+    const handleCreateGroup = () => {
+        dispatch(createNewGroup(newGroupData));
+        setIsAddingNewGroup(false);
     }
 
     return (
@@ -69,10 +79,10 @@ export const GroupList = (props: Props) => {
                     <DialogHeader>
                         <DialogTitle>Thêm nhóm chi tiêu</DialogTitle>
                     </DialogHeader>
-                    <GroupForm type="add" />
+                    <GroupForm type="add" groupData={newGroupData} setGroupData={setNewGroupData} />
                     <DialogFooter className="mt-4">
-                        <Button type="submit" className="bg-blue-600 text-white">
-                            Lưu thay đổi
+                        <Button type="submit" onClick={handleCreateGroup} className="bg-blue-600 text-white">
+                            Lưu
                         </Button>
                     </DialogFooter>
                 </DialogContent>

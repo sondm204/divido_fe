@@ -1,29 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { X } from 'lucide-react';
 import { Input } from '../../../components/ui/input';
 import { Label } from "../../ui/label";
 import { User } from "../../../state/Entities/EntitiesSlice";
 import { getUserByEmail } from "../../../services/UserService";
+import { Group } from "../../../state/GroupEditor/GroupEditorSlice";
 
 type Props = {
     type: 'add' | 'edit',
-    groupName?: string,
-    users?: User[],
-    createdAt?: string,
+    groupData: Group,
+    setGroupData: any
 }
 
 export const GroupForm = (props: Props) => {
+    const { type, groupData, setGroupData } = props;
 
     const [isOpenDropDown, setIsOpenDropDown] = useState(false);
     const [searchUser, setSearchUser] = useState<User>();
     const [searchEmail, setSearchEmail] = useState<string>('');
-
-    const [groupData, setGroupData] = useState({
-        name: props.groupName || '',
-        users: props.users || [],
-        createdAt: props.createdAt ? new Date(props.createdAt) : new Date()
-    })
 
     function checkEmailSuffix(text: string) {
         const regex = /@(gmail\.com|yahoo\.com|outlook\.com)$/;
@@ -48,15 +43,15 @@ export const GroupForm = (props: Props) => {
     };
 
     const handleChooseUser = () => {
-        setIsOpenDropDown(false);
-        setSearchEmail('');
         if (searchUser) {
-            setGroupData({ ...groupData, users: [...groupData.users, searchUser] });
+            setGroupData({ ...groupData, users: [...groupData.users || [], searchUser] });
+            setIsOpenDropDown(false);
+            setSearchEmail('');
         }
     }
 
     const removeChooseUser = (userId: string) => {
-        setGroupData({ ...groupData, users: groupData.users.filter((user) => user.id !== userId) });
+        setGroupData({ ...groupData, users: groupData.users?.filter((user) => user.id !== userId) });
     }
 
     const handleGroupNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,14 +70,14 @@ export const GroupForm = (props: Props) => {
 
             <div className="flex flex-col gap-1">
                 <Label className="text-sm font-medium">Số lượng người</Label>
-                <Input defaultValue={groupData.users.length} disabled />
+                <Input value={groupData.users?.length} disabled />
             </div>
 
             <div className="flex flex-col gap-1">
                 <Label className="text-sm font-medium">Thành viên</Label>
                 <div className="relative border rounded-md p-2 flex flex-wrap gap-2 bg-white dark:bg-gray-800 min-h-[48px]">
                     {/* Tag 1 */}
-                    {groupData.users.map((user) => (
+                    {groupData.users?.map((user) => (
                         <div key={user.id} className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
                             {user.name}
                             <button className="ml-1 text-blue-600 hover:text-red-500 dark:text-blue-300 dark:hover:text-red-400">
@@ -121,7 +116,7 @@ export const GroupForm = (props: Props) => {
 
             <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium">Ngày tạo</label>
-                <Input type="date" value={groupData.createdAt.toISOString().split('T')[0]} disabled />
+                <Input type="date" value={groupData.createdAt.split('T')[0]} disabled />
             </div>
         </div>
     )

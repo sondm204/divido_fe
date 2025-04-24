@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchGroups } from '../../state/GroupEditor/GroupEditorSlice';
+import { fetchGroups, Group, fetchUsersByGroup } from '../../state/GroupEditor/GroupEditorSlice';
 import styled from "styled-components";
 import { Plus, Search, X } from 'lucide-react';
 import {
@@ -19,14 +19,30 @@ import { ExpenseList } from "./ExpenseList";
 import { Pencil, Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
-import { AppDispatch, RootState } from "../../state/store";
 import { GroupForm } from "./form/GroupForm";
+import { User } from "../../state/Entities/EntitiesSlice";
+import { AppDispatch, RootState } from "../../state/store";
 
 
 
 export const ExpenseContent = () => {
     const selectedGroupId = useSelector((state: RootState) => state.groupEditor.selectedGroupId);
     const selectedGroup = useSelector((state: RootState) => state.groupEditor.groups.find((g) => g.id === selectedGroupId));
+    const [groupData, setGroupData] = useState<Group>();
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        setGroupData({
+            id: selectedGroup?.id || '',
+            name: selectedGroup?.name || '',
+            users: selectedGroup?.users || [],
+            createdAt: selectedGroup?.createdAt || ''
+        })
+
+        if (!selectedGroup?.users) {
+            dispatch(fetchUsersByGroup(selectedGroupId!));
+        }
+    }, [selectedGroup, selectedGroupId, dispatch]);
 
     return (
         <ExpenseContentWrapper className="flex-1 p-6 overflow-y-auto">
@@ -41,7 +57,7 @@ export const ExpenseContent = () => {
                         <DialogHeader>
                             <DialogTitle>Chỉnh sửa nhóm chi tiêu</DialogTitle>
                         </DialogHeader>
-                        <GroupForm type="edit" groupName={selectedGroup?.name} users={selectedGroup?.users} createdAt={selectedGroup?.createdAt} />
+                        <GroupForm type="edit" groupData={groupData as Group} setGroupData={setGroupData} />
                         <DialogFooter className="mt-4">
                             <Button type="submit" className="bg-blue-600 text-white">
                                 Lưu thay đổi
