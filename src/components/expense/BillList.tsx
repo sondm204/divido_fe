@@ -19,12 +19,6 @@ export const BillList = (props: Props) => {
        dispatch(fetchBill(selectedExpenseId)); 
     }, [dispatch, selectedExpenseId]);
     const bill = useSelector((state: RootState) => state.expenseEditor.find(expense => expense.id === selectedExpenseId)?.bills || []);
-    console.log(bill);
-    const mockData = [
-        { name: "Sữa tươi", quantity: 2, price: 28000, owner: "An" },
-        { name: "Bánh mì", quantity: 5, price: 10000, owner: "Bình" },
-        { name: "Trứng gà", quantity: 1, price: 32000, owner: "Chi" },
-    ];
 
     return (
         <BillListWrapper className="overflow-hidden max-h-[400px] rounded-lg shadow-lg">

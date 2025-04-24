@@ -94,7 +94,7 @@ export const GroupList = (props: Props) => {
                         <Plus size={20} />
                     </button>
                 </DialogTrigger>
-                <DialogContent className="max-w-md">
+                <DialogContent className="max-w-md dark:text-white">
                     <DialogHeader>
                         <DialogTitle>Thêm nhóm chi tiêu</DialogTitle>
                     </DialogHeader>

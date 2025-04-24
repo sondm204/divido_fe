@@ -65,7 +65,7 @@ export const ExpenseContent = () => {
                     <DialogTrigger>
                         <FaRegEdit className="hover:text-blue-600 transition ease-in-out duration-200" />
                     </DialogTrigger>
-                    <DialogContent className="max-w-md">
+                    <DialogContent className="max-w-md dark:text-white">
                         <DialogHeader>
                             <DialogTitle>Chỉnh sửa nhóm chi tiêu</DialogTitle>
                         </DialogHeader>
@@ -108,7 +108,7 @@ export const ExpenseContent = () => {
                             + Thêm chi tiêu
                         </button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-md">
+                    <DialogContent className="max-w-md dark:text-white">
                         <DialogHeader>
                             <DialogTitle>Tạo chi tiêu</DialogTitle>
                         </DialogHeader>
