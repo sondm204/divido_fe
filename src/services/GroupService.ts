@@ -36,3 +36,18 @@ export const createGroup = async (params: {
     const data = await response.json();
     return data;
 };
+
+export const deleteGroup = async (params: {
+    groupId: string
+}) => {
+    const endpoint = `http://localhost:8080/groups/${params.groupId}`;
+    const response = await fetch(endpoint, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+    return data;
+};

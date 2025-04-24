@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getGroups } from '../../services/GroupService';
+import { deleteGroup, getGroups } from '../../services/GroupService';
 import { getUsersByGroup } from '../../services/UserService';
 import { createGroup } from "../../services/GroupService";
 import { User } from "../Entities/EntitiesSlice";
@@ -50,6 +50,10 @@ const groupEditorSlice = createSlice({
                 state.groups = [...state.groups, action.payload.data];
                 state.selectedGroupId = action.payload.data.id;
         })
+        builder
+            .addCase(removeGroup.fulfilled, (state, action) => {
+                state.groups = state.groups.filter(group => group.id !== action.payload);
+        })
     },
 });
 
@@ -89,6 +93,18 @@ export const createNewGroup = createAsyncThunk(
             return response;
         } catch (error) {
             return rejectWithValue("Failed to create group");
+        }
+    }
+)
+
+export const removeGroup = createAsyncThunk(
+    "groupEditor/removeGroup",
+    async (groupId: string, { rejectWithValue }) => {
+        try {
+            await deleteGroup({ groupId });
+            return groupId;
+        } catch (error) {
+            return rejectWithValue("Failed to remove group");
         }
     }
 )

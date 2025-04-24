@@ -8,10 +8,10 @@ import {
     DialogTitle,
     DialogFooter,
 } from "../../components/ui/dialog";
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, Trash2 } from 'lucide-react';
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
-import { setSelectedGroupId, createNewGroup, Group, fetchGroups } from "../../state/GroupEditor/GroupEditorSlice";
+import { setSelectedGroupId, createNewGroup, Group, fetchGroups, removeGroup } from "../../state/GroupEditor/GroupEditorSlice";
 import { Button } from "../commons/Button";
 import { GroupForm } from "./form/GroupForm";
 import { User } from "../../state/Entities/EntitiesSlice";
@@ -40,6 +40,10 @@ export const GroupList = (props: Props) => {
         setIsAddingNewGroup(false);
     }
 
+    const handleRemoveGroup = (groupId: string) => {
+        dispatch(removeGroup(groupId));
+    }
+
     return (
         <GroupListWrapper className="w-72 border-r dark:border-gray-700 bg-white dark:bg-gray-800 p-4 flex flex-col">
             {/* Sidebar */}
@@ -59,10 +63,18 @@ export const GroupList = (props: Props) => {
                     groups.map((group) => (
                         <div
                             key={group.id}
-                            className="p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                            className="flex justify-between items-center p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
                             onClick={() => handleSelectGroup(group.id)}
                         >
-                            {group.name}
+                            <span>{group.name}</span>
+                            <Trash2
+                                size={20}
+                                className="text-red-600 hover:scale-110 transition duration-200 ease-in-out"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveGroup(group.id);
+                                }}
+                            />
                         </div>
                     ))
                 }
