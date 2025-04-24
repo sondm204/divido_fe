@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { X } from 'lucide-react';
 import { Input } from '../../../components/ui/input';
 import { Label } from "../../ui/label";
-import { User } from "../../../state/Entities/EntitiesSlice";
+import { User } from "../../../state/UserEditor/UserEditorSlice";
 import { getUserByEmail } from "../../../services/UserService";
 import { Group } from "../../../state/GroupEditor/GroupEditorSlice";
+import { RootState } from "../../../state/store";
+import { useSelector } from "react-redux";
 
 type Props = {
     type: 'add' | 'edit',
@@ -15,6 +17,8 @@ type Props = {
 
 export const GroupForm = (props: Props) => {
     const { type, groupData, setGroupData } = props;
+
+    const currentUser = useSelector((state: RootState) => state.userEditor);
 
     const [isOpenDropDown, setIsOpenDropDown] = useState(false);
     const [searchUser, setSearchUser] = useState<User>();
@@ -78,11 +82,13 @@ export const GroupForm = (props: Props) => {
                 <div className="relative border rounded-md p-2 flex flex-wrap gap-2 bg-white dark:bg-gray-800 min-h-[48px]">
                     {/* Tag 1 */}
                     {groupData.users?.map((user) => (
-                        <div key={user.id} className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
-                            {user.name}
-                            <button className="ml-1 text-blue-600 hover:text-red-500 dark:text-blue-300 dark:hover:text-red-400">
-                                <X size={14} onClick={() => removeChooseUser(user.id)} />
-                            </button>
+                        <div key={user.id} className="flex items-center bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
+                            {user.id === currentUser.id ? 'Tôi' : user.name}
+                            {user.id !== currentUser.id && ( 
+                                <button className="ml-1 text-blue-600 hover:text-red-500 dark:text-blue-300 dark:hover:text-red-400">
+                                    <X size={14} onClick={() => removeChooseUser(user.id)} />
+                                </button>
+                            )}
                         </div>
                     ))}
 

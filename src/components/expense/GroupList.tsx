@@ -11,21 +11,22 @@ import {
 import { Plus, Search, Trash2 } from 'lucide-react';
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
-import { setSelectedGroupId, createNewGroup, Group, fetchGroups, removeGroup } from "../../state/GroupEditor/GroupEditorSlice";
+import { setSelectedGroupId, createNewGroup, Group, removeGroup } from "../../state/GroupEditor/GroupEditorSlice";
 import { Button } from "../commons/Button";
 import { GroupForm } from "./form/GroupForm";
-import { User } from "../../state/Entities/EntitiesSlice";
+import { User } from "../../state/UserEditor/UserEditorSlice";
 
 
 type Props = {}
 
 export const GroupList = (props: Props) => {
+    const currentUser = useSelector((state: RootState) => state.userEditor);
     const [isAddingNewGroup, setIsAddingNewGroup] = useState(false);
     const groups = useSelector((state: RootState) => state.groupEditor.groups);
     const [newGroupData, setNewGroupData] = useState<Group>({
         id: '',
         name: '',
-        users: [] as User[],
+        users: [currentUser] as User[],
         createdAt: new Date().toISOString()
     })
 

@@ -1,4 +1,4 @@
-import { User } from "../state/Entities/EntitiesSlice";
+import { User } from "../state/UserEditor/UserEditorSlice";
 
 export const getGroups = async (params: {
     userId: string

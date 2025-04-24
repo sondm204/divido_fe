@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { deleteGroup, getGroups } from '../../services/GroupService';
 import { getUsersByGroup } from '../../services/UserService';
 import { createGroup } from "../../services/GroupService";
-import { User } from "../Entities/EntitiesSlice";
+import { User } from "../UserEditor/UserEditorSlice";
 
 export interface Group {
     id: string;

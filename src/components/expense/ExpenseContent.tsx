@@ -20,7 +20,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
 import { GroupForm } from "./form/GroupForm";
-import { User } from "../../state/Entities/EntitiesSlice";
+import { User } from "../../state/UserEditor/UserEditorSlice";
 import { AppDispatch, RootState } from "../../state/store";
 
 
