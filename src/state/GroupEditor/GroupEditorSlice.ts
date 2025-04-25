@@ -3,11 +3,14 @@ import { deleteGroup, getGroups } from '../../services/GroupService';
 import { getUsersByGroup } from '../../services/UserService';
 import { createGroup } from "../../services/GroupService";
 import { User } from "../UserEditor/UserEditorSlice";
+import { Category } from "../ExpenseEditor/ExpenseEditorSlice";
+import { getCategoriesByGroup } from "../../services/CategoryService";
 
 export interface Group {
     id: string;
     name: string;
     users?: User[];
+    categories?: Category[];
     createdAt: string;
 }
 
@@ -46,6 +49,14 @@ const groupEditorSlice = createSlice({
                 }
             });
         builder
+            .addCase(fetchCategoriesByGroup.fulfilled, (state, action) => {
+                const { groupId, categories } = action.payload;
+                const group = state.groups.find(group => group.id === groupId);
+                if (group) {
+                    group.categories = categories;
+                }
+            });
+        builder
             .addCase(createNewGroup.fulfilled, (state, action) => {
                 state.groups = [...state.groups, action.payload.data];
                 state.selectedGroupId = action.payload.data.id;
@@ -81,6 +92,18 @@ export const fetchUsersByGroup = createAsyncThunk(
             return response;
         } catch (error) {
             return rejectWithValue("Failed to fetch users");
+        }
+    }
+)
+
+export const fetchCategoriesByGroup = createAsyncThunk(
+    "groupEditor/fetchCategoriesByGroup",
+    async (groupId: string, { rejectWithValue }) => {
+        try {
+            const response = await getCategoriesByGroup({ groupId });
+            return response;
+        } catch (error) {
+            return rejectWithValue("Failed to fetch categories");
         }
     }
 )

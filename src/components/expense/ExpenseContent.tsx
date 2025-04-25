@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchGroups, Group, fetchUsersByGroup } from '../../state/GroupEditor/GroupEditorSlice';
+import { fetchGroups, Group, fetchUsersByGroup, fetchCategoriesByGroup } from '../../state/GroupEditor/GroupEditorSlice';
 import styled from "styled-components";
 import { Plus, Search, X } from 'lucide-react';
 import {
@@ -41,6 +41,10 @@ export const ExpenseContent = () => {
 
         if (!selectedGroup?.users) {
             dispatch(fetchUsersByGroup(selectedGroupId!));
+        }
+
+        if (!selectedGroup?.categories) {
+            dispatch(fetchCategoriesByGroup(selectedGroupId!));
         }
     }, [selectedGroup, selectedGroupId, dispatch]);
 
