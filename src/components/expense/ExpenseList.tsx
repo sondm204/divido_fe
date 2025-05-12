@@ -26,10 +26,13 @@ type Props = {
 export const ExpenseList = (props: Props) => {
     const { selectedGroupId } = props;
     const dispatch = useDispatch<AppDispatch>();
-    const selectedGroup = useSelector((state: RootState) => state.groupEditor.groups.find((g) => g.id === selectedGroupId));
+    const selectedGroup = useSelector((state: RootState) => 
+        Array.isArray(state.groupEditor.groups) 
+            ? state.groupEditor.groups.find((g) => g.id === selectedGroupId)
+            : null
+    );
     const users = selectedGroup?.users || [];
     const categories = selectedGroup?.categories || [];
-    console.log(selectedGroup);
 
     useEffect(() => {
         dispatch(fetchExpenses(selectedGroupId || ""));
@@ -71,7 +74,7 @@ export const ExpenseList = (props: Props) => {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:text-gray-300">
-                    {expenseList.map((item: Expense, index) => (
+                    {Array.isArray(expenseList) && expenseList.map((item: Expense, index) => (
                         <tr key={index}>
                             <td className="px-4 py-2">{index + 1}</td>
                             <td className="px-4 py-2">

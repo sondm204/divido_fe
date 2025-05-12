@@ -15,7 +15,7 @@ export interface Group {
 }
 
 export interface GroupEditorState {
-    groups: Group[];
+    groups: Group[] | null;
     selectedGroupId: string | null;
 }
 export const groupEditorInitialSlice: GroupEditorState = {
@@ -43,7 +43,7 @@ const groupEditorSlice = createSlice({
         builder
             .addCase(fetchUsersByGroup.fulfilled, (state, action) => {
                 const { groupId, users } = action.payload;
-                const group = state.groups.find(group => group.id === groupId);
+                const group = Array.isArray(state.groups) ? state.groups.find(group => group.id === groupId) || null : null;
                 if (group) {
                     group.users = users;
                 }
@@ -51,19 +51,19 @@ const groupEditorSlice = createSlice({
         builder
             .addCase(fetchCategoriesByGroup.fulfilled, (state, action) => {
                 const { groupId, categories } = action.payload;
-                const group = state.groups.find(group => group.id === groupId);
+                const group = Array.isArray(state.groups) ? state.groups.find(group => group.id === groupId) || null : null;
                 if (group) {
                     group.categories = categories;
                 }
             });
         builder
             .addCase(createNewGroup.fulfilled, (state, action) => {
-                state.groups = [...state.groups, action.payload.data];
+                state.groups = Array.isArray(state.groups) ? [...state.groups, action.payload.data] : [action.payload.data];
                 state.selectedGroupId = action.payload.data.id;
         })
         builder
             .addCase(removeGroup.fulfilled, (state, action) => {
-                state.groups = state.groups.filter(group => group.id !== action.payload);
+                state.groups = Array.isArray(state.groups) ? state.groups.filter(group => group.id !== action.payload) : null;
         })
     },
 });
