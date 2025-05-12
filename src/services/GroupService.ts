@@ -1,9 +1,10 @@
+import { GROUP_SERVICE_URL, USER_SERVICE_URL } from "../components/commons/constants";
 import { User } from "../state/UserEditor/UserEditorSlice";
 
 export const getGroups = async (params: {
     userId: string
 }) => {
-    const endpoint = `http://localhost:8080/users/${params.userId}/groups`;
+    const endpoint = `${USER_SERVICE_URL}/${params.userId}/groups`;
     const response = await fetch(endpoint, {
         method: 'GET',
         headers: {
@@ -20,7 +21,7 @@ export const createGroup = async (params: {
     users?: User[],
     createdAt: string
 }) => {
-    const endpoint = `http://localhost:8080/groups`;
+    const endpoint = `${GROUP_SERVICE_URL}`;
     const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
