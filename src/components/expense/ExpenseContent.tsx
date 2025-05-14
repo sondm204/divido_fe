@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchGroups, Group, fetchUsersByGroup, fetchCategoriesByGroup } from '../../state/GroupEditor/GroupEditorSlice';
+import { fetchGroups, Group, fetchUsersByGroup, fetchCategoriesByGroup, updateGroup } from '../../state/GroupEditor/GroupEditorSlice';
 import styled from "styled-components";
 import { Plus, Search, X } from 'lucide-react';
 import {
@@ -34,30 +34,40 @@ export const ExpenseContent = () => {
     );
     const [groupData, setGroupData] = useState<Group>();
     const dispatch = useDispatch<AppDispatch>();
+    const [isOpenEditGroup, setIsOpenEditGroup] = useState(false);
 
     useEffect(() => {
-        setGroupData({
-            id: selectedGroup?.id || '',
-            name: selectedGroup?.name || '',
-            users: selectedGroup?.users || [],
-            createdAt: selectedGroup?.createdAt || ''
-        })
-
-        if (!selectedGroup?.users) {
-            dispatch(fetchUsersByGroup(selectedGroupId!));
+        if (selectedGroup) {
+            setGroupData({
+                id: selectedGroup.id,
+                name: selectedGroup.name,
+                users: selectedGroup.users || [],
+                createdAt: selectedGroup.createdAt
+            });
         }
 
-        if (!selectedGroup?.categories) {
-            dispatch(fetchCategoriesByGroup(selectedGroupId!));
+        if (selectedGroupId && !selectedGroup?.users) {
+            dispatch(fetchUsersByGroup(selectedGroupId));
+        }
+
+        if (selectedGroupId && !selectedGroup?.categories) {
+            dispatch(fetchCategoriesByGroup(selectedGroupId));
         }
     }, [selectedGroup, selectedGroupId, dispatch]);
+
+    const handleEditGroup = async () => {
+        if (groupData) {
+            await dispatch(updateGroup(groupData));
+            setIsOpenEditGroup(false);
+        }
+    }
 
     return (
         <ExpenseContentWrapper className="flex-1 p-6 overflow-y-auto">
             {/* Tên nhóm */}
             <div className="flex gap-2 items-center text-xl font-bold mb-4 dark:text-white">
                 <h2>{selectedGroup?.name}</h2>
-                <Dialog>
+                <Dialog open={isOpenEditGroup} onOpenChange={setIsOpenEditGroup}>
                     <DialogTrigger>
                         <FaRegEdit className="hover:text-blue-600 transition ease-in-out duration-200" />
                     </DialogTrigger>
@@ -67,7 +77,7 @@ export const ExpenseContent = () => {
                         </DialogHeader>
                         <GroupForm type="edit" groupData={groupData as Group} setGroupData={setGroupData} />
                         <DialogFooter className="mt-4">
-                            <Button type="submit" className="bg-blue-600 text-white">
+                            <Button onClick={handleEditGroup} type="submit" className="bg-blue-600 text-white">
                                 Lưu thay đổi
                             </Button>
                         </DialogFooter>

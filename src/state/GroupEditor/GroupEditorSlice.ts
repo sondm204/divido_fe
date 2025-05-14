@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { deleteGroup, getGroups } from '../../services/GroupService';
+import { deleteGroup, editGroup, getGroups } from '../../services/GroupService';
 import { getUsersByGroup } from '../../services/UserService';
 import { createGroup } from "../../services/GroupService";
 import { User } from "../UserEditor/UserEditorSlice";
@@ -64,9 +64,16 @@ const groupEditorSlice = createSlice({
                 state.groups = Array.isArray(state.groups) ? [...state.groups, action.payload.data] : [action.payload.data];
                 state.selectedGroupId = action.payload.data.id;
             })
-        builder
             .addCase(removeGroup.fulfilled, (state, action) => {
                 state.groups = Array.isArray(state.groups) ? state.groups.filter(group => group.id !== action.payload) : null;
+            })
+            .addCase(updateGroup.fulfilled, (state, action) => {
+                const { group } = action.payload;
+                if (Array.isArray(state.groups)) {
+                    state.groups = state.groups.map(g => 
+                        g.id === group.id ? { ...g, ...group } : g
+                    );
+                }
             })
         builder
             .addCase(fetchExpenses.fulfilled, (state, action) => {
@@ -139,6 +146,18 @@ export const createNewGroup = createAsyncThunk(
             return response;
         } catch (error) {
             return rejectWithValue("Failed to create group");
+        }
+    }
+)
+
+export const updateGroup = createAsyncThunk(
+    "groupEditor/updateGroup",
+    async (group: Group, { rejectWithValue }) => {
+        try {
+            const response = await editGroup({ group });
+            return response;
+        } catch (error) {
+            return rejectWithValue("Failed to update group");
         }
     }
 )
