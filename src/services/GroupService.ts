@@ -41,7 +41,7 @@ export const createGroup = async (params: {
 export const deleteGroup = async (params: {
     groupId: string
 }) => {
-    const endpoint = `http://localhost:8080/groups/${params.groupId}`;
+    const endpoint = `${GROUP_SERVICE_URL}/${params.groupId}`;
     const response = await fetch(endpoint, {
         method: 'DELETE',
         headers: {

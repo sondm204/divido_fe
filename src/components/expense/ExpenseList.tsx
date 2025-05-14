@@ -11,7 +11,7 @@ import { TbListDetails } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../state/store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchExpenses } from "../../state/ExpenseEditor/ExpenseEditorSlice";
+import { fetchExpenses } from "../../state/GroupEditor/GroupEditorSlice";
 import { Expense } from '../../state/ExpenseEditor/ExpenseEditorSlice';
 import { format } from 'date-fns';
 import { BillList } from "./BillList";
@@ -26,16 +26,19 @@ type Props = {
 export const ExpenseList = (props: Props) => {
     const { selectedGroupId } = props;
     const dispatch = useDispatch<AppDispatch>();
-    const selectedGroup = useSelector((state: RootState) => state.groupEditor.groups.find((g) => g.id === selectedGroupId));
+    const selectedGroup = useSelector((state: RootState) =>
+        Array.isArray(state.groupEditor.groups)
+            ? state.groupEditor.groups.find((g) => g.id === selectedGroupId)
+            : null
+    );
     const users = selectedGroup?.users || [];
     const categories = selectedGroup?.categories || [];
-    console.log(selectedGroup);
 
     useEffect(() => {
         dispatch(fetchExpenses(selectedGroupId || ""));
     }, [dispatch, selectedGroupId]);
 
-    const expenseList = useSelector((state: RootState) => state.expenseEditor);
+    const expenseList = useSelector((state: RootState) => state.groupEditor.groups?.find((g) => g.id === selectedGroupId)?.expenses);
 
     const [editExpenseId, setEditExpenseId] = useState<string | null>(null);
     const [editDate, setEditDate] = useState<Date>();
@@ -46,7 +49,7 @@ export const ExpenseList = (props: Props) => {
 
     const handleEditExpense = (expenseId: string) => {
         setEditExpenseId(expenseId);
-        const editExpense = expenseList.find((expense) => expense.id === expenseId);
+        const editExpense = expenseList?.find((expense) => expense.id === expenseId);
         setEditDate(editExpense?.spentAt || new Date());
         setEditCategory(editExpense?.category.name);
         setEditPayer(editExpense?.payer.name);
@@ -71,7 +74,7 @@ export const ExpenseList = (props: Props) => {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:text-gray-300">
-                    {expenseList.map((item: Expense, index) => (
+                    {Array.isArray(expenseList) && expenseList.map((item: Expense, index) => (
                         <tr key={index}>
                             <td className="px-4 py-2">{index + 1}</td>
                             <td className="px-4 py-2">

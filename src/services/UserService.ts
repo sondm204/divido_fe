@@ -1,4 +1,4 @@
-import { USER_SERVICE_URL } from "../components/commons/constants";
+import { GROUP_SERVICE_URL, USER_SERVICE_URL } from "../components/commons/constants";
 
 export const getUserById = async (params: { id: string }) => {
     const endpoint = `${USER_SERVICE_URL}/${params.id}`;
@@ -27,7 +27,7 @@ export const getUserByEmail = async (params: { email: string }) => {
 }
 
 export const getUsersByGroup = async (params: { groupId: string }) => {
-    const endpoint = `http://localhost:8080/groups/${params.groupId}/users`;
+    const endpoint = `${GROUP_SERVICE_URL}/${params.groupId}/users`;
     const response = await fetch(endpoint, {
         method: 'GET',
         headers: {

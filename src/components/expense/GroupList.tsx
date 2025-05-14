@@ -61,7 +61,7 @@ export const GroupList = (props: Props) => {
             {/* Danh sách nhóm */}
             <div className="flex-1 overflow-y-auto space-y-2 dark:text-white" >
                 {
-                    groups.map((group) => (
+                    Array.isArray(groups) && groups.map((group) => (
                         <div
                             key={group.id}
                             className="flex justify-between items-center p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"

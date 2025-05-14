@@ -3,7 +3,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { CgAddR } from "react-icons/cg";
 import { AppDispatch, RootState } from "../../state/store";
 import { useEffect } from "react";
-import { fetchBill } from "../../state/ExpenseEditor/ExpenseEditorSlice";
+import { fetchBill } from "../../state/GroupEditor/GroupEditorSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 
@@ -14,12 +14,16 @@ type Props = {
 
 export const BillList = (props: Props) => {
     const { selectedExpenseId } = props;
+    const selectedGroupId = useSelector((state: RootState) => state.groupEditor.selectedGroupId);
     const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
        dispatch(fetchBill(selectedExpenseId)); 
     }, [dispatch, selectedExpenseId]);
-    const bill = useSelector((state: RootState) => state.expenseEditor.find(expense => expense.id === selectedExpenseId)?.bills || []);
+    const bill = useSelector((state: RootState) => state.groupEditor.groups?.find((g) => g.id === selectedGroupId)?.expenses?.find((e) => e.id === selectedExpenseId)?.bills || []);
 
+    useEffect(() => {
+        console.log(bill);
+    }, [bill]);
     return (
         <BillListWrapper className="overflow-hidden max-h-[400px] rounded-lg shadow-lg">
             <table className="w-full text-sm dark:text-gray-300">
@@ -34,7 +38,7 @@ export const BillList = (props: Props) => {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:text-gray-300">
-                    {bill.map((item, idx) => (
+                    {bill?.map((item, idx) => (
                         <tr key={idx}>
                             <td className="px-4 py-2">{item.name}</td>
                             <td className="px-4 py-2">{item.quantity}</td>

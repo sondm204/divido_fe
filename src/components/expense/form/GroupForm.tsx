@@ -81,7 +81,7 @@ export const GroupForm = (props: Props) => {
                 <Label className="text-sm font-medium">Thành viên</Label>
                 <div className="relative border rounded-md p-2 flex flex-wrap gap-2 bg-white dark:bg-gray-800 min-h-[48px]">
                     {/* Tag 1 */}
-                    {groupData.users?.map((user) => (
+                    {Array.isArray(groupData.users) && groupData.users?.map((user) => (
                         <div key={user.id} className="flex items-center bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
                             {user.id === currentUser.id ? 'Tôi' : user.name}
                             {user.id !== currentUser.id && ( 

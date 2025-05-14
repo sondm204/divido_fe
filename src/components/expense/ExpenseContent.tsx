@@ -27,7 +27,11 @@ import { AppDispatch, RootState } from "../../state/store";
 
 export const ExpenseContent = () => {
     const selectedGroupId = useSelector((state: RootState) => state.groupEditor.selectedGroupId);
-    const selectedGroup = useSelector((state: RootState) => state.groupEditor.groups.find((g) => g.id === selectedGroupId));
+    const selectedGroup = useSelector((state: RootState) => 
+        Array.isArray(state.groupEditor.groups) 
+            ? state.groupEditor.groups.find((g) => g.id === selectedGroupId)
+            : null
+    );
     const [groupData, setGroupData] = useState<Group>();
     const dispatch = useDispatch<AppDispatch>();
 
