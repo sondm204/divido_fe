@@ -11,7 +11,7 @@ import { TbListDetails } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../state/store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchExpenses } from "../../state/ExpenseEditor/ExpenseEditorSlice";
+import { fetchExpenses } from "../../state/GroupEditor/GroupEditorSlice";
 import { Expense } from '../../state/ExpenseEditor/ExpenseEditorSlice';
 import { format } from 'date-fns';
 import { BillList } from "./BillList";
@@ -26,8 +26,8 @@ type Props = {
 export const ExpenseList = (props: Props) => {
     const { selectedGroupId } = props;
     const dispatch = useDispatch<AppDispatch>();
-    const selectedGroup = useSelector((state: RootState) => 
-        Array.isArray(state.groupEditor.groups) 
+    const selectedGroup = useSelector((state: RootState) =>
+        Array.isArray(state.groupEditor.groups)
             ? state.groupEditor.groups.find((g) => g.id === selectedGroupId)
             : null
     );
@@ -38,7 +38,7 @@ export const ExpenseList = (props: Props) => {
         dispatch(fetchExpenses(selectedGroupId || ""));
     }, [dispatch, selectedGroupId]);
 
-    const expenseList = useSelector((state: RootState) => state.expenseEditor);
+    const expenseList = useSelector((state: RootState) => state.groupEditor.groups?.find((g) => g.id === selectedGroupId)?.expenses);
 
     const [editExpenseId, setEditExpenseId] = useState<string | null>(null);
     const [editDate, setEditDate] = useState<Date>();
@@ -49,7 +49,7 @@ export const ExpenseList = (props: Props) => {
 
     const handleEditExpense = (expenseId: string) => {
         setEditExpenseId(expenseId);
-        const editExpense = expenseList.find((expense) => expense.id === expenseId);
+        const editExpense = expenseList?.find((expense) => expense.id === expenseId);
         setEditDate(editExpense?.spentAt || new Date());
         setEditCategory(editExpense?.category.name);
         setEditPayer(editExpense?.payer.name);

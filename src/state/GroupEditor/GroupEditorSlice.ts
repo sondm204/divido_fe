@@ -3,14 +3,17 @@ import { deleteGroup, getGroups } from '../../services/GroupService';
 import { getUsersByGroup } from '../../services/UserService';
 import { createGroup } from "../../services/GroupService";
 import { User } from "../UserEditor/UserEditorSlice";
-import { Category } from "../ExpenseEditor/ExpenseEditorSlice";
+import { Category, Expense } from "../ExpenseEditor/ExpenseEditorSlice";
 import { getCategoriesByGroup } from "../../services/CategoryService";
+import { getBillOfExpense } from "../../services/ExpenseService";
+import { getAllExpenses } from "../../services/ExpenseService";
 
 export interface Group {
     id: string;
     name: string;
     users?: User[];
     categories?: Category[];
+    expenses?: Expense[];
     createdAt: string;
 }
 
@@ -60,11 +63,31 @@ const groupEditorSlice = createSlice({
             .addCase(createNewGroup.fulfilled, (state, action) => {
                 state.groups = Array.isArray(state.groups) ? [...state.groups, action.payload.data] : [action.payload.data];
                 state.selectedGroupId = action.payload.data.id;
-        })
+            })
         builder
             .addCase(removeGroup.fulfilled, (state, action) => {
                 state.groups = Array.isArray(state.groups) ? state.groups.filter(group => group.id !== action.payload) : null;
-        })
+            })
+        builder
+            .addCase(fetchExpenses.fulfilled, (state, action) => {
+                const expenses = action.payload;
+                const group = Array.isArray(state.groups) ? state.groups.find(group => group.id === state.selectedGroupId) || null : null;
+                if (group) {
+                    group.expenses = expenses;
+                }
+            });
+        builder
+            .addCase(fetchBill.fulfilled, (state, action) => {
+                const { expenseId, bill } = action.payload;
+                const group = Array.isArray(state.groups) ? state.groups.find(group => group.id === state.selectedGroupId) || null : null;
+                if (group) {
+                    const expense = group.expenses?.find(expense => expense.id === expenseId) || null;
+                    if (expense) {
+                        expense.bills = bill;
+                    }
+                }
+            });
+
     },
 });
 
@@ -128,6 +151,30 @@ export const removeGroup = createAsyncThunk(
             return groupId;
         } catch (error) {
             return rejectWithValue("Failed to remove group");
+        }
+    }
+)
+
+export const fetchExpenses = createAsyncThunk(
+    "expenseEditor/fetchExpenses",
+    async (groupId: string, { rejectWithValue }) => {
+        try {
+            const response = await getAllExpenses(groupId);
+            return response;
+        } catch (error) {
+            return rejectWithValue("Failed to fetch expenses");
+        }
+    }
+)
+
+export const fetchBill = createAsyncThunk(
+    "expenseEditor/fetchBill",
+    async (expenseId: string, { rejectWithValue }) => {
+        try {
+            const response = await getBillOfExpense(expenseId);
+            return response;
+        } catch (error) {
+            return rejectWithValue("Failed to fetch expenses");
         }
     }
 )

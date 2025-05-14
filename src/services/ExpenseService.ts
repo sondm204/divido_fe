@@ -23,5 +23,8 @@ export const getBillOfExpense = async (expenseId: string) => {
     });
 
     const data = await response.json();
-    return data;
+    return {
+        expenseId: expenseId,
+        bill: data
+    };
 }
