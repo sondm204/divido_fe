@@ -1,3 +1,4 @@
+import { Group } from "@/state/GroupEditor/GroupEditorSlice";
 import { GROUP_SERVICE_URL, USER_SERVICE_URL } from "../components/commons/constants";
 import { User } from "../state/UserEditor/UserEditorSlice";
 
@@ -36,6 +37,24 @@ export const createGroup = async (params: {
 
     const data = await response.json();
     return data;
+};
+
+export const editGroup = async (params: {
+    group: Group
+}) => {
+    const endpoint = `${GROUP_SERVICE_URL}/${params.group.id}`;
+    const response = await fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params.group)
+    });
+
+    const data = await response.json();
+    return {
+        group: data.data
+    };
 };
 
 export const deleteGroup = async (params: {
