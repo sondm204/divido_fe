@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { X } from 'lucide-react';
 import { Input } from '../../../components/ui/input';
@@ -24,6 +24,12 @@ export const GroupForm = (props: Props) => {
     const [searchUser, setSearchUser] = useState<User>();
     const [searchEmail, setSearchEmail] = useState<string>('');
 
+    useEffect(() => {
+        if (type === 'add') {
+            setGroupData({ ...groupData, users: [currentUser] });
+        }
+    }, []);
+
     function checkEmailSuffix(text: string) {
         const regex = /@(gmail\.com|yahoo\.com|outlook\.com)$/;
         return regex.test(text);
@@ -48,9 +54,12 @@ export const GroupForm = (props: Props) => {
 
     const handleChooseUser = () => {
         if (searchUser) {
-            setGroupData({ ...groupData, users: [...groupData.users || [], searchUser] });
             setIsOpenDropDown(false);
             setSearchEmail('');
+            if (groupData.users?.find((user) => user.id === searchUser.id)) {
+                return;
+            }
+            setGroupData({ ...groupData, users: [...groupData.users || [], searchUser] });
         }
     }
 
@@ -84,14 +93,13 @@ export const GroupForm = (props: Props) => {
                     {Array.isArray(groupData.users) && groupData.users?.map((user) => (
                         <div key={user.id} className="flex items-center bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-sm dark:bg-blue-900 dark:text-blue-100">
                             {user.id === currentUser.id ? 'Tôi' : user.name}
-                            {user.id !== currentUser.id && ( 
+                            {user.id !== currentUser.id && (
                                 <button className="ml-1 text-blue-600 hover:text-red-500 dark:text-blue-300 dark:hover:text-red-400">
                                     <X size={14} onClick={() => removeChooseUser(user.id)} />
                                 </button>
                             )}
                         </div>
                     ))}
-
                     {/* Input field */}
                     <input
                         className="flex-1 min-w-[120px] px-2 py-1 text-sm outline-none bg-transparent"

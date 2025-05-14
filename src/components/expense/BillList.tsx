@@ -21,9 +21,6 @@ export const BillList = (props: Props) => {
     }, [dispatch, selectedExpenseId]);
     const bill = useSelector((state: RootState) => state.groupEditor.groups?.find((g) => g.id === selectedGroupId)?.expenses?.find((e) => e.id === selectedExpenseId)?.bills || []);
 
-    useEffect(() => {
-        console.log(bill);
-    }, [bill]);
     return (
         <BillListWrapper className="overflow-hidden max-h-[400px] rounded-lg shadow-lg">
             <table className="w-full text-sm dark:text-gray-300">
