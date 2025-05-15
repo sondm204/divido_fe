@@ -1,12 +1,12 @@
 import React from 'react';
-import { cn } from '../../lib/utils'; // Hàm merge classNames nếu có, hoặc dùng clsx cũng được
+import { cn } from "../../../lib/utils"
 
-type ButtonProps = {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   children: React.ReactNode;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+}
 
 const variantStyles = {
   primary: 'bg-blue-600 text-white hover:bg-blue-700',

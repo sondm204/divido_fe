@@ -1,5 +1,6 @@
-import { HomeBody } from '../../components/molecules/home/HomeBody';
-import { AppHeader } from '../../components/molecules/header/AppHeader';
+
+import { AppHeader } from "@/components/molecules/header/AppHeader";
+import { HomeBody } from "@/components/molecules/home/HomeBody";
 import styled from "styled-components";
 
 

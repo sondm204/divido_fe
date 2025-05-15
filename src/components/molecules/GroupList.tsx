@@ -7,19 +7,19 @@ import {
     DialogContent,
     DialogTitle,
     DialogFooter,
-} from "../../components/ui/dialog";
+} from "../../components/atoms/dialog/dialog";
 import { Plus, Search, Trash2 } from 'lucide-react';
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
 import { setSelectedGroupId, createNewGroup, Group, removeGroup } from "../../state/GroupEditor/GroupEditorSlice";
-import { Button } from "../commons/Button";
 import { GroupForm } from "./form/GroupForm";
 import { User } from "../../state/UserEditor/UserEditorSlice";
+import { Button } from "../atoms/button/Button";
 
 
-type Props = {}
+interface GroupListProps {}
 
-export const GroupList = (props: Props) => {
+export const GroupList = (props: GroupListProps) => {
     const currentUser = useSelector((state: RootState) => state.userEditor);
     const [isAddingNewGroup, setIsAddingNewGroup] = useState(false);
     const groups = useSelector((state: RootState) => state.groupEditor.groups);
