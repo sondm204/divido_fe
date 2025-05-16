@@ -32,8 +32,10 @@ export const ExpenseList = (props: ExpenseProps) => {
     const categories = selectedGroup?.categories || [];
 
     useEffect(() => {
-        dispatch(fetchExpenses(selectedGroupId || ""));
-    }, [dispatch, selectedGroupId]);
+        if (selectedGroupId) {
+            dispatch(fetchExpenses(selectedGroupId));
+        }
+    }, [selectedGroupId]);
 
     const expenseList = useSelector((state: RootState) => state.groupEditor.groups?.find((g) => g.id === selectedGroupId)?.expenses);
 

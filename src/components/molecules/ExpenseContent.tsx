@@ -51,7 +51,7 @@ export const ExpenseContent = () => {
         if (selectedGroupId && !selectedGroup?.categories) {
             dispatch(fetchCategoriesByGroup(selectedGroupId));
         }
-    }, [selectedGroup, selectedGroupId, dispatch]);
+    }, [selectedGroupId]);
 
     const handleEditGroup = async () => {
         if (groupData) {
