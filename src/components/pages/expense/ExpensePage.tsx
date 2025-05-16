@@ -1,5 +1,5 @@
-import { ExpenseBody } from '../../components/molecules/ExpenseBody';
-import { AppHeader } from '../../components/molecules/header/AppHeader';
+import { ExpenseBody } from '@/components/molecules/ExpenseBody';
+import { AppHeader } from '@/components/molecules/header/AppHeader';
 import styled from 'styled-components';
 
 export const ExpensePage = () => {
