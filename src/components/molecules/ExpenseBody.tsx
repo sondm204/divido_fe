@@ -21,7 +21,7 @@ export const ExpenseBody = (props: Props) => {
         if (Array.isArray(groups) && groups.length === 0) {
             dispatch(fetchGroups(userId));
         }
-    }, [dispatch, userId, groups]);
+    }, [userId]);
 
     return (
         <ExpenseBodyWrapper className="flex h-[calc(100vh-64px)] dark:bg-gray-800 bg-gray-100">

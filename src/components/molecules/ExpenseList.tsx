@@ -4,9 +4,7 @@ import {
     DialogTrigger,
     DialogContent,
     DialogTitle,
-    DialogDescription,
-    DialogFooter,
-} from "../../components/ui/dialog";
+} from "../../components/atoms/dialog/dialog";
 import { TbListDetails } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../state/store";
@@ -15,15 +13,14 @@ import { fetchExpenses } from "../../state/GroupEditor/GroupEditorSlice";
 import { Expense } from '../../state/ExpenseEditor/ExpenseEditorSlice';
 import { format } from 'date-fns';
 import { BillList } from "./BillList";
-import { Pencil, Save, Trash, Trash2 } from "lucide-react";
+import { Pencil, Save, Trash2 } from "lucide-react";
 import { CgAddR } from "react-icons/cg";
-import { Input } from "../ui/input";
-
-type Props = {
+import { Input } from '../../components/atoms/input/input';
+interface ExpenseProps  {
     selectedGroupId: string | null
 };
 
-export const ExpenseList = (props: Props) => {
+export const ExpenseList = (props: ExpenseProps) => {
     const { selectedGroupId } = props;
     const dispatch = useDispatch<AppDispatch>();
     const selectedGroup = useSelector((state: RootState) =>
@@ -35,8 +32,10 @@ export const ExpenseList = (props: Props) => {
     const categories = selectedGroup?.categories || [];
 
     useEffect(() => {
-        dispatch(fetchExpenses(selectedGroupId || ""));
-    }, [dispatch, selectedGroupId]);
+        if (selectedGroupId) {
+            dispatch(fetchExpenses(selectedGroupId));
+        }
+    }, [selectedGroupId]);
 
     const expenseList = useSelector((state: RootState) => state.groupEditor.groups?.find((g) => g.id === selectedGroupId)?.expenses);
 

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchGroups, Group, fetchUsersByGroup, fetchCategoriesByGroup, updateGroup } from '../../state/GroupEditor/GroupEditorSlice';
+import { Group, fetchUsersByGroup, fetchCategoriesByGroup, updateGroup } from '../../state/GroupEditor/GroupEditorSlice';
 import styled from "styled-components";
-import { Plus, Search, X } from 'lucide-react';
 import {
     Dialog,
     DialogHeader,
@@ -10,18 +9,17 @@ import {
     DialogContent,
     DialogTitle,
     DialogFooter,
-} from "../../components/ui/dialog";
-import { Input } from '../../components/ui/input';
+} from "../../components/atoms/dialog/dialog";
+import { Input } from '../../components/atoms/input/input'
 import { FaRegEdit } from 'react-icons/fa';
-import { Label } from "../ui/label";
-import { Button } from "../commons/Button";
 import { ExpenseList } from "./ExpenseList";
-import { Pencil, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { TbListDetails } from "react-icons/tb";
 import { CgAddR } from "react-icons/cg";
 import { GroupForm } from "./form/GroupForm";
-import { User } from "../../state/UserEditor/UserEditorSlice";
 import { AppDispatch, RootState } from "../../state/store";
+import { Button } from "../atoms/button/Button";
+import { Label } from "../atoms/label/label";
 
 
 
@@ -53,7 +51,7 @@ export const ExpenseContent = () => {
         if (selectedGroupId && !selectedGroup?.categories) {
             dispatch(fetchCategoriesByGroup(selectedGroupId));
         }
-    }, [selectedGroup, selectedGroupId, dispatch]);
+    }, [selectedGroupId]);
 
     const handleEditGroup = async () => {
         if (groupData) {

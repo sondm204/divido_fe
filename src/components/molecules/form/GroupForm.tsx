@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import { X } from 'lucide-react';
-import { Input } from '../../../components/ui/input';
-import { Label } from "../../ui/label";
+import { Input } from '../../../components/atoms/input/input';
+import { Label } from "../../atoms/label/label";
 import { User } from "../../../state/UserEditor/UserEditorSlice";
 import { getUserByEmail } from "../../../services/UserService";
 import { Group } from "../../../state/GroupEditor/GroupEditorSlice";

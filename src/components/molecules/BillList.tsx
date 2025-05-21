@@ -6,8 +6,6 @@ import { useEffect } from "react";
 import { fetchBill } from "../../state/GroupEditor/GroupEditorSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-
-
 type Props = {
     selectedExpenseId: string;
 };
