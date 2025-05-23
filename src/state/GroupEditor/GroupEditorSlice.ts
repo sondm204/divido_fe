@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { deleteGroup, editGroup, getGroups } from '../../services/GroupService';
+import { deleteGroup, editGroup, getGroup, getGroups } from '../../services/GroupService';
 import { getUsersByGroup } from '../../services/UserService';
 import { createGroup } from "../../services/GroupService";
 import { User } from "../UserEditor/UserEditorSlice";
@@ -39,6 +39,20 @@ const groupEditorSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchGroup.fulfilled, (state, action) => {
+                if (Array.isArray(state.groups)) {
+                    const existingGroupIndex = state.groups.findIndex(group => group.id === action.payload.id);
+                    if (existingGroupIndex !== -1) {
+                        state.groups[existingGroupIndex] = action.payload;
+                    } else {
+                        state.groups = [...state.groups, action.payload];
+                    }
+                } else {
+                    state.groups = [action.payload];
+                }
+                state.selectedGroupId = action.payload.id;
+            })
+        builder
             .addCase(fetchGroups.fulfilled, (state, action) => {
                 state.groups = action.payload;
                 state.selectedGroupId = action.payload.length > 0 ? action.payload[0].id : null;
@@ -70,7 +84,7 @@ const groupEditorSlice = createSlice({
             .addCase(updateGroup.fulfilled, (state, action) => {
                 const { group } = action.payload;
                 if (Array.isArray(state.groups)) {
-                    state.groups = state.groups.map(g => 
+                    state.groups = state.groups.map(g =>
                         g.id === group.id ? { ...g, ...group } : g
                     );
                 }
@@ -101,6 +115,18 @@ const groupEditorSlice = createSlice({
 export const { setGroups, setSelectedGroupId } = groupEditorSlice.actions;
 
 
+export const fetchGroup = createAsyncThunk(
+    "groupEditor/fetchGroup",
+    async (groupId: string, { rejectWithValue }) => {
+        try {
+            const response = await getGroup({ groupId });
+            console.log(response);
+            return response;
+        } catch (error) {
+            return rejectWithValue("Failed to fetch group");
+        }
+    }
+)
 
 export const fetchGroups = createAsyncThunk(
     "groupEditor/fetchGroups",

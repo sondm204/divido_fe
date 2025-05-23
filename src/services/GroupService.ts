@@ -2,6 +2,21 @@ import { Group } from "@/state/GroupEditor/GroupEditorSlice";
 import { GROUP_SERVICE_URL, USER_SERVICE_URL } from "../components/commons/constants";
 import { User } from "../state/UserEditor/UserEditorSlice";
 
+export const getGroup = async (params: {
+    groupId: string
+}) => {
+    const endpoint = `${GROUP_SERVICE_URL}/${params.groupId}`;
+    const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+    return data;
+};
+
 export const getGroups = async (params: {
     userId: string
 }) => {

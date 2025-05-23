@@ -39,7 +39,7 @@ export const BillList = (props: Props) => {
                             <td className="px-4 py-2">{item.quantity}</td>
                             <td className="px-4 py-2">{item.unitPrice?.toLocaleString("de-DE") || 0}đ</td>
                             <td className="px-4 py-2">{item.totalPrice?.toLocaleString("de-DE") || 0}đ</td>
-                            <td className="px-4 py-2">{item.owner.join(", ")}</td>
+                            <td className="px-4 py-2">{item.owner.map((o) => o.name).join(", ")}</td>
                             <td className="px-4 py-2 flex gap-2">
                                 <Pencil size={16} className="hover:scale-110 transition ease-in-out duration-200 cursor-pointer" />
                                 <Trash2 size={16} className="text-red-500 hover:scale-110 transition ease-in-out duration-200 cursor-pointer" />

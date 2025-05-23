@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { Group, fetchUsersByGroup, fetchCategoriesByGroup, updateGroup } from '../../state/GroupEditor/GroupEditorSlice';
+import { Group, fetchUsersByGroup, fetchCategoriesByGroup, updateGroup, fetchGroup } from '../../state/GroupEditor/GroupEditorSlice';
 import styled from "styled-components";
 import {
     Dialog,
@@ -43,12 +43,15 @@ export const ExpenseContent = () => {
                 createdAt: selectedGroup.createdAt
             });
         }
+        // if (selectedGroupId) {
+        //     dispatch(fetchGroup(selectedGroupId));
+        // }
 
-        if (selectedGroupId && !selectedGroup?.users) {
+        if (selectedGroupId && selectedGroup?.users?.length === 0) {
             dispatch(fetchUsersByGroup(selectedGroupId));
         }
 
-        if (selectedGroupId && !selectedGroup?.categories) {
+        if (selectedGroupId && selectedGroup?.categories?.length === 0) {
             dispatch(fetchCategoriesByGroup(selectedGroupId));
         }
     }, [selectedGroupId]);
