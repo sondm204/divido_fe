@@ -4,7 +4,7 @@ export interface Bill {
     quantity: number;
     unitPrice: number;
     totalPrice: number;
-    owner: []
+    owner: User[];
 }
 
 export interface ShareRatio {

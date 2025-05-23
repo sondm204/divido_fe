@@ -16,7 +16,7 @@ import { BillList } from "./BillList";
 import { Pencil, Save, Trash2 } from "lucide-react";
 import { CgAddR } from "react-icons/cg";
 import { Input } from '../../components/atoms/input/input';
-interface ExpenseProps  {
+interface ExpenseProps {
     selectedGroupId: string | null
 };
 
@@ -32,7 +32,7 @@ export const ExpenseList = (props: ExpenseProps) => {
     const categories = selectedGroup?.categories || [];
 
     useEffect(() => {
-        if (selectedGroupId) {
+        if (selectedGroupId && selectedGroup?.expenses?.length === 0) {
             dispatch(fetchExpenses(selectedGroupId));
         }
     }, [selectedGroupId]);
