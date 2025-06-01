@@ -1,47 +1,41 @@
-import React from 'react';
-import { cn } from "../../../lib/utils"
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
+import React from "react";
+import { cn } from "../../../lib/utils";
+import { Button as MUIBtn } from "@mui/material";
+interface ButtonProps {
+  variant?: "text" | "contained" | "outlined";
+  size?: "small" | "medium" | "large";
+  className?: string;
   isLoading?: boolean;
+  disabled?: boolean;
   children: React.ReactNode;
+  onClick?: () => void;
+  color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
+  type?: "submit" | "reset" | "button";
 }
 
-const variantStyles = {
-  primary: 'bg-blue-600 text-white hover:bg-blue-700',
-  secondary: 'bg-gray-200 text-black hover:bg-gray-300',
-  danger: 'bg-red-600 text-white hover:bg-red-700',
-  ghost: 'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700',
-  outline: 'bg-transparent dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700',
-};
-
-const sizeStyles = {
-  sm: 'text-sm px-3 py-1.5',
-  md: 'text-base px-4 py-2',
-  lg: 'text-lg px-6 py-3',
-};
-
 export const Button: React.FC<ButtonProps> = ({
-  variant = 'primary',
-  size = 'md',
+  variant = "outlined",
+  size = "medium",
   isLoading = false,
   children,
   className,
-  ...props
+  disabled = false,
+  onClick,
+  color="primary",
+  type,
 }) => {
   return (
-    <button
-      className={cn(
-        'rounded-md font-medium transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed',
-        variantStyles[variant],
-        sizeStyles[size],
-        className
-      )}
-      disabled={isLoading || props.disabled}
-      {...props}
+    <MUIBtn
+      loading={isLoading}
+      variant={variant}
+      size={size}
+      className={cn("!cursor-pointer", className)}
+      disabled={disabled}
+      onClick={onClick}
+      color={color}
+      type={type}
     >
-      {isLoading ? 'Đang tải...' : children}
-    </button>
+      {children ? children : "Button"}
+    </MUIBtn>
   );
 };

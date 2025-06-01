@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 import { X } from 'lucide-react';
-import { Input } from '../../../components/atoms/input/input';
 import { Label } from "../../atoms/label/label";
 import { User } from "../../../state/UserEditor/UserEditorSlice";
 import { getUserByEmail } from "../../../services/UserService";
 import { Group } from "../../../state/GroupEditor/GroupEditorSlice";
 import { RootState } from "../../../state/store";
 import { useSelector } from "react-redux";
+import { Input } from "../../atoms/input/input";
 
 type Props = {
     type: 'add' | 'edit',
@@ -74,16 +74,15 @@ export const GroupForm = (props: Props) => {
     return (
         <div className="space-y-4 mt-2">
             <div className="flex flex-col gap-1">
-                <Label className="text-sm font-medium">Tên nhóm</Label>
                 <Input
+                label="Tên nhóm"
                     placeholder="Nhập tên nhóm"
                     value={groupData.name}
                     onChange={handleGroupNameInputChange} />
             </div>
 
             <div className="flex flex-col gap-1">
-                <Label className="text-sm font-medium">Số lượng người</Label>
-                <Input value={groupData.users?.length} disabled />
+                <Input label="Số lượng người" type="number" value={groupData.users?.length} disabled />
             </div>
 
             <div className="flex flex-col gap-1">
@@ -129,8 +128,7 @@ export const GroupForm = (props: Props) => {
             </div>
 
             <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium">Ngày tạo</label>
-                <Input type="date" value={groupData.createdAt.split('T')[0]} disabled />
+                <Input label="Ngày tạo" type="date" value={groupData.createdAt.split('T')[0]} disabled />
             </div>
         </div>
     )
